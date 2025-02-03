@@ -46,6 +46,11 @@
       background-color: #4CAF50; /* Green for Yes */
       color: white;
     }
+    #yesButton2 {
+      background-color: #4CAF50; /* Green for Yes */
+      color: white;
+      display: none; /* Hidden by default */
+    }
     #noButton {
       background-color: #f44336; /* Red for No */
       color: white;
@@ -65,6 +70,7 @@
   <div class="buttons">
     <button id="yesButton">Yes</button>
     <button id="noButton">No</button>
+    <button id="yesButton2">Yes</button> <!-- Second Yes button -->
   </div>
   <div id="responseText"></div>
 
@@ -72,6 +78,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const questionElement = document.getElementById('question');
       const yesButton = document.getElementById('yesButton');
+      const yesButton2 = document.getElementById('yesButton2');
       const noButton = document.getElementById('noButton');
       const gifContainer = document.querySelector('.gif-container');
       const responseText = document.getElementById('responseText');
@@ -92,13 +99,18 @@
       ];
 
       // Function to handle "Yes" button click
-      yesButton.addEventListener('click', () => {
+      const handleYesClick = () => {
         questionElement.innerHTML = 'Thank you, I love you, Puntu! 💕';
         gifContainer.innerHTML = '<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHk2bDQxZjI3Ym94bWY0b201NjlvbThlcTVhaXIwZDhsem8zZzdtayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/AVDSRfk3vhR0bBmaoV/giphy.gif" alt="Celebration GIF">';
         yesButton.style.display = 'none';
+        yesButton2.style.display = 'none';
         noButton.style.display = 'none';
         responseText.style.display = 'none';
-      });
+      };
+
+      // Attach event listener to both Yes buttons
+      yesButton.addEventListener('click', handleYesClick);
+      yesButton2.addEventListener('click', handleYesClick);
 
       // Function to handle "No" button click
       noButton.addEventListener('click', () => {
@@ -107,9 +119,13 @@
           noClicks++;
         }
 
+        if (noClicks >= 9) {
+          noButton.style.display = 'none'; // Hide the No button
+          yesButton2.style.display = 'inline-block'; // Show the second Yes button
+        }
+
         if (noClicks >= 10) {
-          noButton.style.display = 'none';
-          yesButton.style.fontSize = '2em'; // Make "Yes" button larger
+          yesButton.style.fontSize = '2em'; // Make the first Yes button larger
           yesButton.click(); // Automatically trigger "Yes" action
         } else {
           // Shrink the "No" button
